@@ -1,15 +1,29 @@
 const mongoose = require("mongoose");
 
-// TODO: Define your Task schema here
-const taskSchema = new mongoose.Schema(
-  {
-    // TODO: Add title field (String, required, trim)
-    // TODO: Add completed field (Boolean, default false)
+const sessionSchema = new mongoose.Schema({
+  taskId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Task',  // References Task model
+    required: true
   },
-  {
-    timestamps: true,
+  duration: {
+    type: Number,  // Duration in seconds
+    required: true,
+    min: 1
+  },
+  completed: {
+    type: Boolean,
+    default: true  // Assume completed when logged
+  },
+  startTime: {
+    type: Date,
+    required: true
   }
-);
+}, {
+  timestamps: true,
+  
+});
 
-const Task = mongoose.model("Task", taskSchema);
-module.exports = Task;
+const Session = mongoose.model('Session', sessionSchema);
+
+module.exports = Session;
