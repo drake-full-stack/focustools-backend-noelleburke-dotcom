@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const sessionSchema = new mongoose.Schema({
   taskId: {
@@ -7,23 +7,25 @@ const sessionSchema = new mongoose.Schema({
     required: true
   },
   duration: {
-    type: Number,  // Duration in seconds
+    type: 1500,  // Duration in seconds
     required: true,
     min: 1
   },
   completed: {
     type: Boolean,
-    default: true  // Assume completed when logged
+    default: false  // Assume completed when logged
   },
   startTime: {
     type: Date,
     required: true
   }
 }, {
-  timestamps: true,
-  
-});
 
-const Session = mongoose.model('Session', sessionSchema);
+  },
+  {
+    timestamps: true,
+  }
+);
 
+const Session = mongoose.model("Session", sessionSchema);
 module.exports = Session;

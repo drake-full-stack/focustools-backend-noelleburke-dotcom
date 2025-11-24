@@ -32,9 +32,9 @@ app.get("/", (req, res) => {
 
 // TODO: Add your Task routes here
 //POST /api/tasks
-app.post("/api/tasks", async (req,res)=>{
+app.post("/api/task", async (req,res)=>{
 try{
-   const newTask= new Task(req,body);
+   const newTask= new Task(req.body);
    const savedTask= await newTask.save();
    res.status(201).json(savedTask);
 } catch (error){
@@ -117,7 +117,7 @@ app.delete("/api/tasks", async (req, res) => {
 
 // TODO: Add your Session routes here
 // POST /api/sessions
-router.post("/", async (req, res) => {
+app.post("/", async (req, res) => {
   try {
     const sessions = await Session.find().populate('taskId');
      res.status(201).json(sessions); // or savedTask if you're creating that
@@ -128,7 +128,7 @@ router.post("/", async (req, res) => {
 
 
 // GET /api/sessions
-router.get("/", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
