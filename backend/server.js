@@ -1,12 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-
+const cors = require("cors");
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
+
+
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // MongoDB Connection
 mongoose
@@ -16,7 +19,7 @@ mongoose
 
 // Import models
 const Task = require("./models/Task");
-//const Session = require("./models/Session");
+const Session = require("./models/Session");
 
 // Root route
 app.get("/", (req, res) => {
@@ -32,7 +35,7 @@ app.get("/", (req, res) => {
 
 // TODO: Add your Task routes here
 //POST /api/tasks
-app.post("/api/task", async (req,res)=>{
+app.post("/api/tasks", async (req,res)=>{
 try{
    const newTask= new Task(req.body);
    const savedTask= await newTask.save();
@@ -71,7 +74,7 @@ app.get("/api/tasks/id", async (req, res) => {
 });
 
 // PUT /api/tasks/:id
-app.put("/api/tasks", async (req, res) => {
+app.put("/api/tasks/:id", async (req, res) => {
   try {
     const updatedTask = await Task.findByIdAndUpdate(
       req.params.id, // Which book to update
@@ -84,7 +87,7 @@ app.put("/api/tasks", async (req, res) => {
 
     if (!updatedTask) {
       return res.status(404).json({
-        message: "Book not found",
+        message: "Task not found",
       });
     }
 
@@ -95,13 +98,13 @@ app.put("/api/tasks", async (req, res) => {
 });
 
 // DELETE /api/tasks/:id
-app.delete("/api/tasks", async (req, res) => {
+app.delete("/api/tasks/:id", async (req, res) => {
   try {
-    const deletedTask = await Book.findByIdAndDelete(req.params.id);
+    const deletedTask = await Task.findByIdAndDelete(req.params.id);
 
     if (!deletedTask) {
       return res.status(404).json({
-        message: "Book not found",
+        message: "task not found",
       });
     }
 
@@ -117,10 +120,10 @@ app.delete("/api/tasks", async (req, res) => {
 
 // TODO: Add your Session routes here
 // POST /api/sessions
-app.post("/", async (req, res) => {
+app.post("/api/sessions", async (req, res) => {
   try {
-    const sessions = await Session.find().populate('taskId');
-     res.status(201).json(sessions); // or savedTask if you're creating that
+    const newSession = await Session.create(req.body);
+    res.status(201).json(newSession);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -128,15 +131,14 @@ app.post("/", async (req, res) => {
 
 
 // GET /api/sessions
-app.get("/", async (req, res) => {
+app.get("/api/sessions", async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.json(tasks);
+    const sessions = await Session.find().populate("taskId");
+    res.json(sessions);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
-
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

@@ -3,29 +3,26 @@ const mongoose = require('mongoose');
 const sessionSchema = new mongoose.Schema({
   taskId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Task',  // References Task model
+    ref: 'Task',
     required: true
   },
   duration: {
-    type: 1500,  // Duration in seconds
+    type: Number, 
     required: true,
     min: 1
   },
   completed: {
     type: Boolean,
-    default: false  // Assume completed when logged
+    default: false
   },
   startTime: {
     type: Date,
     required: true
   }
-}, {
-
-  },
-  {
-    timestamps: true,
-  }
-);
+},
+{
+  timestamps: true
+});
 
 const Session = mongoose.model("Session", sessionSchema);
 module.exports = Session;
